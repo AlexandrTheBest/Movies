@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +22,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     Button sign_in_first, sign_up_first, sign_in_second, sign_up_second;
     LinearLayout buttons_layout, sign_in_layout, sign_up_layout;
-    TextView sign_in_login, sign_in_password, sign_up_personName, sign_up_email, sign_up_login, sign_up_password, sign_up_repeat_password;
+    TextView title;
+    EditText sign_in_login, sign_in_password, sign_up_personName, sign_up_email, sign_up_login, sign_up_password, sign_up_repeat_password;
     SharedPreferences mSettings;
 
     @Override
@@ -33,12 +35,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
+        title.setText(R.string.hello);
         sign_in_layout.setVisibility(View.GONE);
         sign_up_layout.setVisibility(View.GONE);
         buttons_layout.setVisibility(View.VISIBLE);
     }
 
     private void initialComponents() {
+        title = findViewById(R.id.title);
+
         sign_in_first = findViewById(R.id.sign_in_first);
         sign_up_first = findViewById(R.id.sign_up_first);
         sign_in_second = findViewById(R.id.sign_in_second);
@@ -66,27 +71,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean isSignUpValid() {
-        if (sign_up_personName.getText().toString().isEmpty()) return false;
-        if (sign_up_login.getText().toString().isEmpty()) return false;
-        if (sign_up_password.getText().toString().isEmpty() ||
-                sign_up_repeat_password.getText().toString().isEmpty() ||
-                !sign_up_password.getText().toString().equals(sign_up_repeat_password.getText().toString())
-        ) return false;
-        return isEmailValid(sign_up_email.getText().toString());
+        return !sign_up_personName.getText().toString().isEmpty() &&
+                !sign_up_login.getText().toString().isEmpty() &&
+                !sign_up_password.getText().toString().isEmpty() &&
+                !sign_up_repeat_password.getText().toString().isEmpty() &&
+                sign_up_password.getText().toString().equals(sign_up_repeat_password.getText().toString()) &&
+                isEmailValid(sign_up_email.getText().toString());
     }
 
     private boolean isSignInValid() {
-        if (sign_in_login.getText().toString().isEmpty()) return false;
-        if (sign_in_password.getText().toString().isEmpty()) return false;
-        return true;
+        return !sign_in_login.getText().toString().isEmpty() && !sign_in_password.getText().toString().isEmpty();
     }
 
     private boolean isSignInSuccessful() {
-        if (!mSettings.contains("Login") || !mSettings.contains("Password")) return false;
-        if (!sign_in_login.getText().toString().equals(mSettings.getString("Login","")) ||
-                !sign_in_password.getText().toString().equals(mSettings.getString("Password",""))
-        ) return false;
-        return true;
+        return mSettings.contains("Login") && mSettings.contains("Password") &&
+                sign_in_login.getText().toString().equals(mSettings.getString("Login", "")) &&
+                sign_in_password.getText().toString().equals(mSettings.getString("Password", ""));
     }
 
     private void saveRegisterData() {
@@ -104,10 +104,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_first:
+                title.setText(R.string.sign_in);
                 buttons_layout.setVisibility(View.GONE);
                 sign_in_layout.setVisibility(View.VISIBLE);
                 break;
             case R.id.sign_up_first:
+                title.setText(R.string.sign_up);
                 buttons_layout.setVisibility(View.GONE);
                 sign_up_layout.setVisibility(View.VISIBLE);
                 break;
@@ -130,6 +132,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(getApplicationContext(),
                             "Invalid values", Toast.LENGTH_SHORT).show();
                 } else {
+                    title.setText(R.string.hello);
                     saveRegisterData();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(sign_up_second.getWindowToken(),
