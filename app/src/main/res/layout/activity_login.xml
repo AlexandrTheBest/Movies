@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/hello"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hello"
+                android:textSize="40sp"
+                android:textAlignment="center"/>
+
+            <LinearLayout
+                android:id="@+id/buttons_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <Button
+                    android:id="@+id/sign_in_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_in"
+                    android:layout_weight="1"
+                    android:background="@color/button_yes"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black"
+                    android:onClick="onClick"/>
+
+                <Button
+                    android:id="@+id/sign_up_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up"
+                    android:layout_weight="1"
+                    android:background="@color/button_no"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/black"
+                    android:onClick="onClick"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sign_in_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/sign_in_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="@string/login"/>
+
+                <EditText
+                    android:id="@+id/sign_in_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:hint="@string/password"/>
+
+                <Button
+                    android:id="@+id/sign_in_second"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="20sp"
+                    android:hint="@string/sign_in"
+                    android:onClick="onClick"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sign_up_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/sign_up_personName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="@string/name"/>
+
+                <EditText
+                    android:id="@+id/sign_up_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/email"/>
+
+                <EditText
+                    android:id="@+id/sign_up_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="@string/login"/>
+
+                <EditText
+                    android:id="@+id/sign_up_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:hint="@string/password"/>
+
+                <EditText
+                    android:id="@+id/sign_up_repeat_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:hint="@string/repeat_password"/>
+
+                <Button
+                    android:id="@+id/sign_up_second"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="20sp"
+                    android:hint="@string/sign_up"
+                    android:onClick="onClick"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
