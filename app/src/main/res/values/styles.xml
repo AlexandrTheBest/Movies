@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Title" parent="@style/Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/title</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="Subtitle" parent="Title">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="Text" parent="Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="Button" parent="@style/Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Input" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/input</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+</resources>

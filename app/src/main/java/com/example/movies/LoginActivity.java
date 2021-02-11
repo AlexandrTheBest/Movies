@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button sign_in_first, sign_up_first, sign_in_second, sign_up_second;
     LinearLayout buttons_layout, sign_in_layout, sign_up_layout;
     TextView title;
     EditText sign_in_login, sign_in_password, sign_up_personName, sign_up_email, sign_up_login, sign_up_password, sign_up_repeat_password;
@@ -43,11 +42,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initialComponents() {
         title = findViewById(R.id.title);
-
-        sign_in_first = findViewById(R.id.sign_in_first);
-        sign_up_first = findViewById(R.id.sign_up_first);
-        sign_in_second = findViewById(R.id.sign_in_second);
-        sign_up_second = findViewById(R.id.sign_up_second);
 
         buttons_layout = findViewById(R.id.buttons_layout);
         sign_in_layout = findViewById(R.id.sign_in_layout);
@@ -135,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     title.setText(R.string.hello);
                     saveRegisterData();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(sign_up_second.getWindowToken(),
+                    imm.hideSoftInputFromWindow(v.getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
                     sign_up_layout.setVisibility(View.GONE);
                     buttons_layout.setVisibility(View.VISIBLE);
