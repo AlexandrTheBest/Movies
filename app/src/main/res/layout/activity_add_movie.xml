@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:id="@+id/sign_in_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                style="@style/Title"
+                android:text="@string/add_movie"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/poster"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="400dp"
+                android:maxHeight="250dp" />
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/name"
+                android:inputType="textPersonName"
+                android:hint="@string/movie_name"/>
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/description"
+                android:inputType="textMultiLine"
+                android:hint="@string/description"/>
+
+                <Button
+                    style="@style/Button"
+                    android:background="@drawable/input"
+                    android:textColor="@color/text"
+                    android:layout_width="match_parent"
+                    android:id="@+id/load"
+                    android:text="@string/load_image" />
+
+            <Button
+                style="@style/Button"
+                android:id="@+id/add"
+                android:text="@string/add_movie"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

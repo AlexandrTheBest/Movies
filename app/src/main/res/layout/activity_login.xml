@@ -92,7 +92,7 @@
                     style="@style/Input"
                     android:id="@+id/sign_up_personName"
                     android:inputType="textPersonName"
-                    android:hint="@string/name"/>
+                    android:hint="@string/user_name"/>
 
                 <EditText
                     style="@style/Input"

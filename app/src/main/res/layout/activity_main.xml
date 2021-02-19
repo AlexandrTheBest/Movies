@@ -8,12 +8,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/add"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
         <LinearLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -22,144 +25,15 @@
                 style="@style/Title"
                 android:text="@string/hello_movies" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <ImageView
-                    android:id="@+id/ironMan1Poster"
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/iron_man_1_poster"/>
-
-                <TextView
-                    style="@style/Subtitle"
-                    android:text="@string/iron_man_1"
-                    android:layout_weight="1"/>
-
-                <Button
-                    style="@style/Button"
-                    android:id="@+id/iron_man_1_show"
-                    android:text="@string/show"
-                    android:onClick="onClick"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/iron_man_2_poster"/>
-
-                <TextView
-                    style="@style/Subtitle"
-                    android:text="@string/iron_man_2"
-                    android:layout_weight="1"/>
-
-                <Button
-                    style="@style/Button"
-                    android:id="@+id/iron_man_2_show"
-                    android:text="@string/show"
-                    android:onClick="onClick"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/thor_poster"/>
-
-                <TextView
-                    style="@style/Subtitle"
-                    android:text="@string/thor"
-                    android:layout_weight="1"/>
-
-                <Button
-                    style="@style/Button"
-                    android:id="@+id/thor_show"
-                    android:text="@string/show"
-                    android:onClick="onClick"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/the_avengers_poster"/>
-
-                <TextView
-                    style="@style/Subtitle"
-                    android:text="@string/the_avengers"
-                    android:layout_weight="1"/>
-
-                <Button
-                    style="@style/Button"
-                    android:id="@+id/the_avengers_show"
-                    android:text="@string/show"
-                    android:onClick="onClick"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/iron_man_3_poster"/>
-
-                <TextView
-                    style="@style/Subtitle"
-                    android:text="@string/iron_man_3"
-                    android:layout_weight="1"/>
-
-                <Button
-                    style="@style/Button"
-                    android:id="@+id/iron_man_3_show"
-                    android:text="@string/show"
-                    android:onClick="onClick"/>
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </ScrollView>
+
+    <Button
+        style="@style/Button"
+        android:id="@+id/add"
+        android:text="@string/add_movie"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp" />
 
 </RelativeLayout>

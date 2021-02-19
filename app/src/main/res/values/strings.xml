@@ -12,14 +12,18 @@
     <string name="the_avengers_description">Marvel\'s The Avengers, or simply The Avengers, is a 2012 American superhero film based on the Marvel Comics superhero team of the same name. Produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures, it is the sixth film in the Marvel Cinematic Universe (MCU). Written and directed by Joss Whedon, the film features an ensemble cast including Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth, Scarlett Johansson, and Jeremy Renner as the Avengers, alongside Tom Hiddleston, Clark Gregg, Cobie Smulders, Stellan Skarsgård, and Samuel L. Jackson. In the film, Nick Fury and the spy agency S.H.I.E.L.D. recruit Tony Stark, Steve Rogers, Bruce Banner, and Thor to form a team capable of stopping Thor\'s brother Loki from subjugating Earth.</string>
     <string name="iron_man_3_description">Iron Man 3 is a 2013 American superhero film based on the Marvel Comics character Iron Man, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures. It is the sequel to Iron Man (2008) and Iron Man 2 (2010), and the seventh film in the Marvel Cinematic Universe (MCU). The film was directed by Shane Black from a screenplay he co-wrote with Drew Pearce, and stars Robert Downey Jr. as Tony Stark / Iron Man alongside Gwyneth Paltrow, Don Cheadle, Guy Pearce, Rebecca Hall, Stéphanie Szostak, James Badge Dale, Jon Favreau, and Ben Kingsley. In Iron Man 3, Tony Stark wrestles with the ramifications of the events of The Avengers during a national terrorism campaign on the United States led by the mysterious Mandarin.</string>
     <string name="show">Show</string>
-    <string name="back">back</string>
+    <string name="back">Back</string>
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
     <string name="hello">Hello!</string>
-    <string name="name">Name</string>
+    <string name="user_name">Name</string>
     <string name="email">Email</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="repeat_password">Repeat password</string>
     <string name="register">Register</string>
+    <string name="add_movie">Add movie</string>
+    <string name="movie_name">Name</string>
+    <string name="description">Description</string>
+    <string name="load_image">Load image</string>
 </resources>

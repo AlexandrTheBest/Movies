@@ -1,18 +1,26 @@
 package com.example.movies;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
 
-    ImageView poster;
     TextView name, description;
+    ImageView poster;
     Button back;
 
     @Override
@@ -35,34 +43,21 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         description = findViewById(R.id.description);
         back = findViewById(R.id.back);
 
-        switch (getIntent().getStringExtra("name")) {
-            case "iron_man_1":
-                poster.setImageResource(R.drawable.iron_man_1_poster);
-                name.setText(R.string.iron_man_1);
-                description.setText(R.string.iron_man_1_description);
-                break;
-            case "iron_man_2":
-                poster.setImageResource(R.drawable.iron_man_2_poster);
-                name.setText(R.string.iron_man_2);
-                description.setText(R.string.iron_man_2_description);
-                break;
-            case "thor":
-                poster.setImageResource(R.drawable.thor_poster);
-                name.setText(R.string.thor);
-                description.setText(R.string.thor_description);
-                break;
-            case "the_avengers":
-                poster.setImageResource(R.drawable.the_avengers_poster);
-                name.setText(R.string.the_avengers);
-                description.setText(R.string.the_avengers_description);
-                break;
-            case "iron_man_3":
-                poster.setImageResource(R.drawable.iron_man_3_poster);
-                name.setText(R.string.iron_man_3);
-                description.setText(R.string.iron_man_3_description);
-                break;
-            default:
-                break;
+        name.setText(getIntent().getStringExtra("name"));
+        description.setText(getIntent().getStringExtra("description"));
+
+        try {
+            if (getIntent().getStringExtra("posterPath") != null) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(getIntent().getStringExtra("posterPath")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                poster.setImageBitmap(bitmap);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

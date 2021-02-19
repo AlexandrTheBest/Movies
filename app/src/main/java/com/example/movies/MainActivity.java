@@ -2,15 +2,38 @@ package com.example.movies;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import com.example.movies.Entity.Movie;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-    Button iron_man1_show, iron_man2_show, thor_show, the_avengers_show, iron_man3_show;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+
+    LinearLayout layout;
+    Button add;
+    List<View> allViews;
+    static List<Movie> allMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,40 +41,88 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initialComponents();
+        //loadMovies();
+
+        for (Movie x : allMovies) {
+            @SuppressLint("InflateParams")
+            final View view = getLayoutInflater().inflate(R.layout.layout_movie_title,null);
+            ImageView poster = view.findViewById(R.id.poster);
+            TextView name = view.findViewById(R.id.name);
+            Button show = view.findViewById(R.id.show);
+
+            name.setText(x.getName());
+
+            try {
+                if (x.getPosterPath() != null) {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(x.getPosterPath()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    poster.setImageBitmap(bitmap);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            show.setOnClickListener(v1 -> {
+                startActivity(new Intent(MainActivity.this, ShowActivity.class)
+                        .putExtra("name", x.getName())
+                        .putExtra("description", x.getDescription())
+                        .putExtra("posterPath", x.getPosterPath())
+                );
+                finish();
+            });
+
+            allViews.add(view);
+            layout.addView(view);
+        }
+
+        add.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, AddMovieActivity.class));
+            finish();
+        });
     }
 
     private void initialComponents() {
-        iron_man1_show = findViewById(R.id.iron_man_1_show);
-        iron_man2_show = findViewById(R.id.iron_man_2_show);
-        thor_show = findViewById(R.id.thor_show);
-        the_avengers_show = findViewById(R.id.the_avengers_show);
-        iron_man3_show = findViewById(R.id.iron_man_3_show);
+        layout = findViewById(R.id.layout);
+        add = findViewById(R.id.add);
+        allViews = new ArrayList<>();
+        allMovies = new ArrayList<>();
     }
 
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iron_man_1_show:
-                startActivity(new Intent(MainActivity.this, ShowActivity.class).putExtra("name","iron_man_1"));
-                finish();
-                break;
-            case R.id.iron_man_2_show:
-                startActivity(new Intent(MainActivity.this, ShowActivity.class).putExtra("name","iron_man_2"));
-                finish();
-                break;
-            case R.id.thor_show:
-                startActivity(new Intent(MainActivity.this, ShowActivity.class).putExtra("name","thor"));
-                finish();
-                break;
-            case R.id.the_avengers_show:
-                startActivity(new Intent(MainActivity.this, ShowActivity.class).putExtra("name","the_avengers"));
-                finish();
-                break;
-            case R.id.iron_man_3_show:
-                startActivity(new Intent(MainActivity.this, ShowActivity.class).putExtra("name","iron_man_3"));
-                finish();
-                break;
+    private void loadMovies() {
+        try {
+            InputStream inputStream = openFileInput("movies.json");
+
+            if (inputStream != null) {
+                InputStreamReader isr = new InputStreamReader(inputStream);
+                BufferedReader reader = new BufferedReader(isr);
+                String line;
+                StringBuilder builder = new StringBuilder();
+
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line).append('\n');
+                }
+
+                inputStream.close();
+                allMovies = new Gson().fromJson(builder.toString(), new TypeToken<List<Movie>>() {}.getType());
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+    protected void saveMovies() {
+        try {
+            OutputStream outputStream = openFileOutput("movies.json", MODE_PRIVATE);
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream);
+            osw.write(new Gson().toJson(allMovies));
+            osw.close();
+        } catch (Throwable t) {
+            Toast.makeText(getApplicationContext(),
+                    "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
         }
     }
 }
