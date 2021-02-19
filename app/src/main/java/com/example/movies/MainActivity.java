@@ -1,11 +1,13 @@
 package com.example.movies;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,7 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     LinearLayout layout;
-    Button add;
+    Button add, delete;
     List<View> allViews;
     static List<Movie> allMovies;
 
@@ -41,46 +43,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initialComponents();
-        //loadMovies();
+        loadMovies();
 
-        for (Movie x : allMovies) {
-            @SuppressLint("InflateParams")
-            final View view = getLayoutInflater().inflate(R.layout.layout_movie_title,null);
-            ImageView poster = view.findViewById(R.id.poster);
-            TextView name = view.findViewById(R.id.name);
-            Button show = view.findViewById(R.id.show);
-
-            name.setText(x.getName());
-
-            try {
-                if (x.getPosterPath() != null) {
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(x.getPosterPath()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    poster.setImageBitmap(bitmap);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            show.setOnClickListener(v1 -> {
-                startActivity(new Intent(MainActivity.this, ShowActivity.class)
-                        .putExtra("name", x.getName())
-                        .putExtra("description", x.getDescription())
-                        .putExtra("posterPath", x.getPosterPath())
-                );
-                finish();
-            });
-
-            allViews.add(view);
-            layout.addView(view);
-        }
+        updateMovies();
 
         add.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, AddMovieActivity.class));
+            finish();
+        });
+
+        delete.setOnClickListener(v -> {
+            allMovies.clear();
+            saveMovies(this);
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
             finish();
         });
     }
@@ -88,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private void initialComponents() {
         layout = findViewById(R.id.layout);
         add = findViewById(R.id.add);
+        delete = findViewById(R.id.delete);
         allViews = new ArrayList<>();
         allMovies = new ArrayList<>();
     }
@@ -114,15 +90,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void saveMovies() {
+    public static void saveMovies(Context context) {
         try {
-            OutputStream outputStream = openFileOutput("movies.json", MODE_PRIVATE);
+            OutputStream outputStream = context.openFileOutput("movies.json", MODE_PRIVATE);
             OutputStreamWriter osw = new OutputStreamWriter(outputStream);
-            osw.write(new Gson().toJson(allMovies));
+            osw.write(new Gson().toJson(MainActivity.allMovies));
             osw.close();
         } catch (Throwable t) {
-            Toast.makeText(getApplicationContext(),
+            Toast.makeText(context.getApplicationContext(),
                     "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateMovies() {
+        for (Movie x : allMovies) {
+            @SuppressLint("InflateParams")
+            final View view = getLayoutInflater().inflate(R.layout.layout_movie_title,null);
+            ImageView poster = view.findViewById(R.id.poster);
+            TextView name = view.findViewById(R.id.name);
+            Button show = view.findViewById(R.id.show);
+
+            name.setText(x.getName());
+
+            if (x.getPosterPath() != null) {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(x.getPosterPath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                poster.setImageBitmap(bitmap);
+            }
+
+            show.setOnClickListener(v1 -> {
+                startActivity(new Intent(MainActivity.this, ShowActivity.class)
+                        .putExtra("name", x.getName())
+                        .putExtra("description", x.getDescription())
+                        .putExtra("posterPath", x.getPosterPath())
+                );
+                finish();
+            });
+
+            allViews.add(view);
+            layout.addView(view);
         }
     }
 }

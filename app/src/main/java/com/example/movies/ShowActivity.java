@@ -46,18 +46,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         name.setText(getIntent().getStringExtra("name"));
         description.setText(getIntent().getStringExtra("description"));
 
-        try {
-            if (getIntent().getStringExtra("posterPath") != null) {
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(getIntent().getStringExtra("posterPath")));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                poster.setImageBitmap(bitmap);
+        if (getIntent().getStringExtra("posterPath") != null) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(getIntent().getStringExtra("posterPath")));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            poster.setImageBitmap(bitmap);
         }
     }
 
