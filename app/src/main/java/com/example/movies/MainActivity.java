@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +35,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout layout;
-    Button add, delete;
+    RelativeLayout mainLayout;
+    LinearLayout moviesLayout;
+    Button add, delete, gradient;
     List<View> allViews;
     static List<Movie> allMovies;
 
@@ -58,12 +62,25 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, MainActivity.class));
             finish();
         });
+
+        gradient.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, GradientActivity.class));
+            finish();
+        });
+
+        mainLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_appearance));
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
     private void initialComponents() {
-        layout = findViewById(R.id.layout);
+        mainLayout = findViewById(R.id.mainLayout);
+        moviesLayout = findViewById(R.id.moviesLayout);
         add = findViewById(R.id.add);
         delete = findViewById(R.id.delete);
+        gradient = findViewById(R.id.gradient);
         allViews = new ArrayList<>();
         allMovies = new ArrayList<>();
     }
@@ -132,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             allViews.add(view);
-            layout.addView(view);
+            moviesLayout.addView(view);
         }
     }
 }

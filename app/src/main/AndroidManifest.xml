@@ -9,22 +9,18 @@
         android:roundIcon="@drawable/ic_preview"
         android:supportsRtl="true"
         android:theme="@style/Theme.Movies">
-        <activity android:name=".AddMovieActivity"></activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".GradientActivity" />
+        <activity android:name=".AddMovieActivity" />
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" >
+        </activity>
         <activity android:name=".ShowActivity" />
-<!--        <activity android:name=".LoginActivity">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
     </application>
 
 </manifest>

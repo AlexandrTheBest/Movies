@@ -7,8 +7,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import java.net.URL;
 
 public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
 
+    RelativeLayout mainLayout;
     TextView name, description;
     ImageView poster;
     Button back;
@@ -35,9 +38,12 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_show);
 
         initialComponents();
+
+        mainLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_appearance));
     }
 
     private void initialComponents() {
+        mainLayout = findViewById(R.id.mainLayout);
         poster = findViewById(R.id.poster);
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/colorEditLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:visibility="visible">
+
+        <TextView
+            style="@style/Subtitle"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Color 1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Subtitle"
+                android:textSize="20sp"
+                android:text="Red"
+                android:textAlignment="textStart"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"/>
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/editTextRed"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"/>
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBarRed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Subtitle"
+                android:textSize="20sp"
+                android:text="Green"
+                android:textAlignment="textStart"
+                android:layout_weight="1"
+                android:layout_marginTop="0dp"
+                android:layout_marginStart="10dp"/>
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/editTextGreen"
+                android:layout_width="match_parent"
+                android:layout_height="30sp"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"/>
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBarGreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Subtitle"
+                android:textSize="20sp"
+                android:text="Blue"
+                android:textAlignment="textStart"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"/>
+
+            <EditText
+                style="@style/Input"
+                android:id="@+id/editTextBlue"
+                android:layout_width="match_parent"
+                android:layout_height="30sp"
+                android:inputType="number"
+                android:layout_weight="1"
+                android:layout_marginBottom="0dp"/>
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBarBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

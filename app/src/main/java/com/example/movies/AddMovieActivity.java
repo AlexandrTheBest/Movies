@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import java.io.OutputStreamWriter;
 
 public class AddMovieActivity extends AppCompatActivity {
 
+    RelativeLayout mainLayout;
     EditText name, description;
     ImageView poster;
     String posterPath;
@@ -52,9 +55,18 @@ public class AddMovieActivity extends AppCompatActivity {
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, 1);
         });
+
+        mainLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_appearance));
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AddMovieActivity.this, MainActivity.class));
+        finish();
     }
 
     private void initialComponent() {
+        mainLayout = findViewById(R.id.mainLayout);
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
         poster = findViewById(R.id.poster);
