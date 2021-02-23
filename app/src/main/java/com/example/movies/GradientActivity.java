@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -206,6 +208,24 @@ public class GradientActivity extends AppCompatActivity {
     }
 
     private void updateValuesFromEditText() {
+        if (etRed1.getText().toString().isEmpty()) {
+            etRed1.setText("0");
+        }
+        if (etGreen1.getText().toString().isEmpty()) {
+            etGreen1.setText("0");
+        }
+        if (etBlue1.getText().toString().isEmpty()) {
+            etBlue1.setText("0");
+        }
+        if (etRed2.getText().toString().isEmpty()) {
+            etRed2.setText("0");
+        }
+        if (etGreen2.getText().toString().isEmpty()) {
+            etGreen2.setText("0");
+        }
+        if (etBlue2.getText().toString().isEmpty()) {
+            etBlue2.setText("0");
+        }
         sbRed1.setProgress(Integer.parseInt(etRed1.getText().toString()));
         sbGreen1.setProgress(Integer.parseInt(etGreen1.getText().toString()));
         sbBlue1.setProgress(Integer.parseInt(etBlue1.getText().toString()));

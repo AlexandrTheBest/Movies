@@ -38,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:inputType="number"
+                android:imeOptions="actionGo"
                 android:layout_weight="1"
                 android:layout_marginBottom="0dp"/>
 
@@ -69,6 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30sp"
                 android:inputType="number"
+                android:imeOptions="actionDone"
                 android:layout_weight="1"
                 android:layout_marginBottom="0dp"/>
 
@@ -99,6 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30sp"
                 android:inputType="number"
+                android:imeOptions="actionDone"
                 android:layout_weight="1"
                 android:layout_marginBottom="0dp"/>
 
