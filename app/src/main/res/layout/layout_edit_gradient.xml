@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Type" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/linear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Linear"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radial"/>
+
+            <RadioButton
+                android:id="@+id/sweep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sweep"/>
+
+        </RadioGroup>
+
+        <RelativeLayout
+            android:id="@+id/someSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textAlignment="textStart"
+                    android:text="Angle"/>
+
+                <SeekBar
+                    style="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:id="@+id/seekBarAngle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="8" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/radialLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subtitle"
+                        android:textSize="20sp"
+                        android:text="Radius"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"/>
+
+                    <EditText
+                        android:enabled="false"
+                        style="@style/Input"
+                        android:id="@+id/editTextRadialRadius"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:inputType="number"
+                        android:imeOptions="actionDone"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBarRadialRadius"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subtitle"
+                        android:textSize="20sp"
+                        android:text="X"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"/>
+
+                    <EditText
+                        android:enabled="false"
+                        style="@style/Input"
+                        android:id="@+id/editTextRadialX"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:inputType="number"
+                        android:imeOptions="actionDone"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBarRadialX"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subtitle"
+                        android:textSize="20sp"
+                        android:text="Y"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"/>
+
+                    <EditText
+                        android:enabled="false"
+                        style="@style/Input"
+                        android:id="@+id/editTextRadialY"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:inputType="number"
+                        android:imeOptions="actionDone"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBarRadialY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sweepLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subtitle"
+                        android:textSize="20sp"
+                        android:text="X"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"/>
+
+                    <EditText
+                        android:enabled="false"
+                        style="@style/Input"
+                        android:id="@+id/editTextSweepX"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:inputType="number"
+                        android:imeOptions="actionDone"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBarSweepX"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subtitle"
+                        android:textSize="20sp"
+                        android:text="Y"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"/>
+
+                    <EditText
+                        android:enabled="false"
+                        style="@style/Input"
+                        android:id="@+id/editTextSweepY"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:inputType="number"
+                        android:imeOptions="actionDone"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/seekBarSweepY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

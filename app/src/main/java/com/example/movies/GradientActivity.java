@@ -1,42 +1,44 @@
 package com.example.movies;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
+import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 public class GradientActivity extends AppCompatActivity {
 
-    RelativeLayout mainLayout;
     CardView gradient;
     LinearLayout colorEditLayout;
-    View color1, color2;
+    View colorStart, colorEnd, settings;
     ScrollView allColors;
     SeekBar angle, sbRed1, sbGreen1, sbBlue1, sbRed2, sbGreen2, sbBlue2;
     EditText etRed1, etGreen1, etBlue1, etRed2, etGreen2, etBlue2;
+    RadioButton linear, radial, sweep;
     Button changeColorButton, changeColorTypeButton;
-    boolean isChangingColors, isChangingColor1;
+    boolean isChangingColors;
+    int typeChanging; // 0 - color1, 1 - color2, 2 - settings
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,6 @@ public class GradientActivity extends AppCompatActivity {
             }
         };
 
-        angle.setOnSeekBarChangeListener(onSeekBarChangeListener);
         sbRed1.setOnSeekBarChangeListener(onSeekBarChangeListener);
         sbGreen1.setOnSeekBarChangeListener(onSeekBarChangeListener);
         sbBlue1.setOnSeekBarChangeListener(onSeekBarChangeListener);
@@ -71,56 +72,89 @@ public class GradientActivity extends AppCompatActivity {
         sbGreen2.setOnSeekBarChangeListener(onSeekBarChangeListener);
         sbBlue2.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        angle.setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) settings.findViewById(R.id.seekBarRadialRadius)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) settings.findViewById(R.id.seekBarRadialX)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) settings.findViewById(R.id.seekBarRadialY)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) settings.findViewById(R.id.seekBarSweepX)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) settings.findViewById(R.id.seekBarSweepY)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+
+//        TextWatcher textWatcher = new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                String number = s.toString();
+//
+//                if (number.isEmpty()) {
+//                    s.clear();
+//                    return;
+//                }
+//
+//                if (number.length() > 1 && number.charAt(0) == '0') {
+//                    s.clear();
+//                    s.append(number.charAt(1));
+//                    return;
+//                }
+//
+//                if (Integer.parseInt(number) > 255) {
+//                    s.clear();
+//                    s.append("255");
+//                }
+//            }
+//        };
+//
+//        etRed1.addTextChangedListener(textWatcher);
+//        etGreen1.addTextChangedListener(textWatcher);
+//        etBlue1.addTextChangedListener(textWatcher);
+//        etRed2.addTextChangedListener(textWatcher);
+//        etGreen2.addTextChangedListener(textWatcher);
+//        etBlue2.addTextChangedListener(textWatcher);
+
+        ((RadioGroup) settings.findViewById(R.id.radioGroup)).setOnCheckedChangeListener((group, checkedId) -> {
+            Handler handler = new Handler();
+
+            settings.findViewById(R.id.someSettings).startAnimation(disappearance);
+            switch (checkedId) {
+                case R.id.linear:
+                    gradient.startAnimation(disappearance);
+                    handler.postDelayed(() -> {
+                        gradient.startAnimation(appearance);
+                        settings.findViewById(R.id.linearLayout).setVisibility(View.VISIBLE);
+                        settings.findViewById(R.id.radialLayout).setVisibility(View.GONE);
+                        settings.findViewById(R.id.sweepLayout).setVisibility(View.GONE);
+                    }, 500);
+                    break;
+                case R.id.radial:
+                    gradient.startAnimation(disappearance);
+                    handler.postDelayed(() -> {
+                        gradient.startAnimation(appearance);
+                        settings.findViewById(R.id.linearLayout).setVisibility(View.GONE);
+                        settings.findViewById(R.id.radialLayout).setVisibility(View.VISIBLE);
+                        settings.findViewById(R.id.sweepLayout).setVisibility(View.GONE);
+                    }, 500);
+                    break;
+                case R.id.sweep:
+                    gradient.startAnimation(disappearance);
+                    handler.postDelayed(() -> {
+                        gradient.startAnimation(appearance);
+                        settings.findViewById(R.id.linearLayout).setVisibility(View.GONE);
+                        settings.findViewById(R.id.radialLayout).setVisibility(View.GONE);
+                        settings.findViewById(R.id.sweepLayout).setVisibility(View.VISIBLE);
+                    }, 500);
+                    break;
             }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String number = s.toString();
-
-                if (number.isEmpty()) {
-                    s.clear();
-                    return;
-                }
-
-                if (number.length() > 1 && number.charAt(0) == '0') {
-                    s.clear();
-                    s.append(number.charAt(1));
-                    return;
-                }
-
-                if (Integer.parseInt(number) > 255) {
-                    s.clear();
-                    s.append("255");
-                }
-            }
-        };
-
-        etRed1.addTextChangedListener(textWatcher);
-        etGreen1.addTextChangedListener(textWatcher);
-        etBlue1.addTextChangedListener(textWatcher);
-        etRed2.addTextChangedListener(textWatcher);
-        etGreen2.addTextChangedListener(textWatcher);
-        etBlue2.addTextChangedListener(textWatcher);
-
-        View.OnFocusChangeListener onFocusChangeListener = (v, hasFocus) -> {
-            if (!hasFocus) {
-                updateValuesFromEditText();
-            }
-        };
-
-        etRed1.setOnFocusChangeListener(onFocusChangeListener);
-        etGreen1.setOnFocusChangeListener(onFocusChangeListener);
-        etBlue1.setOnFocusChangeListener(onFocusChangeListener);
-        etRed2.setOnFocusChangeListener(onFocusChangeListener);
-        etGreen2.setOnFocusChangeListener(onFocusChangeListener);
-        etBlue2.setOnFocusChangeListener(onFocusChangeListener);
+            handler.postDelayed(() -> {
+                settings.findViewById(R.id.someSettings).startAnimation(appearance);
+                setDrawable();
+            }, 500);
+        });
 
         changeColorButton.setOnClickListener(v -> {
             if (!isChangingColors) {
@@ -135,27 +169,36 @@ public class GradientActivity extends AppCompatActivity {
         });
 
         changeColorTypeButton.setOnClickListener(v -> {
-            if (!isChangingColor1) {
-                color2.startAnimation(disappearance);
-                color1.startAnimation(appearance);
-                color2.setVisibility(View.GONE);
-                color1.setVisibility(View.VISIBLE);
-                changeColorTypeButton.setText("Change Color 2");
-                isChangingColor1 = true;
-            } else {
-                color1.startAnimation(disappearance);
-                color2.startAnimation(appearance);
-                color1.setVisibility(View.GONE);
-                color2.setVisibility(View.VISIBLE);
-                changeColorTypeButton.setText("Change Color 1");
-                isChangingColor1 = false;
+            switch (typeChanging) {
+                case 0:
+                    colorStart.startAnimation(disappearance);
+                    colorEnd.startAnimation(appearance);
+                    colorEnd.setVisibility(View.VISIBLE);
+                    colorStart.setVisibility(View.GONE);
+                    changeColorTypeButton.setText("Change Settings");
+                    typeChanging = 1;
+                    break;
+                case 1:
+                    colorEnd.startAnimation(disappearance);
+                    settings.startAnimation(appearance);
+                    colorEnd.setVisibility(View.GONE);
+                    settings.setVisibility(View.VISIBLE);
+                    changeColorTypeButton.setText("Change Start Color");
+                    typeChanging = 2;
+                    break;
+                case 2:
+                    settings.startAnimation(disappearance);
+                    colorStart.startAnimation(appearance);
+                    settings.setVisibility(View.GONE);
+                    colorStart.setVisibility(View.VISIBLE);
+                    changeColorTypeButton.setText("Change End Color");
+                    typeChanging = 0;
+                    break;
             }
         });
 
-        updateValuesFromEditText();
+        updateValuesFromSeekBar();
         setDrawable();
-
-        mainLayout.startAnimation(appearance);
     }
 
     @Override
@@ -166,45 +209,54 @@ public class GradientActivity extends AppCompatActivity {
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     private void initialComponent() {
-        mainLayout = findViewById(R.id.mainLayout);
         gradient = findViewById(R.id.gradient);
         colorEditLayout = findViewById(R.id.colorEditLayout);
         allColors = findViewById(R.id.allColors);
-        angle = findViewById(R.id.seekBarAngle);
 
-        color1 = getLayoutInflater().inflate(R.layout.layout_edit_color, null);
-        color2 = getLayoutInflater().inflate(R.layout.layout_edit_color, null);
+        colorStart = getLayoutInflater().inflate(R.layout.layout_edit_color, null);
+        colorEnd = getLayoutInflater().inflate(R.layout.layout_edit_color, null);
+        settings = getLayoutInflater().inflate(R.layout.layout_edit_gradient, null);
 
-        color1.setVisibility(View.VISIBLE);
-        color2.setVisibility(View.GONE);
+        ((TextView) colorStart.findViewById(R.id.title)).setText("Start color");
+        ((TextView) colorEnd.findViewById(R.id.title)).setText("End color");
 
-        sbRed1 = color1.findViewById(R.id.seekBarRed);
-        sbGreen1 = color1.findViewById(R.id.seekBarGreen);
-        sbBlue1 = color1.findViewById(R.id.seekBarBlue);
-        sbRed2 = color2.findViewById(R.id.seekBarRed);
-        sbGreen2 = color2.findViewById(R.id.seekBarGreen);
-        sbBlue2 = color2.findViewById(R.id.seekBarBlue);
+        colorStart.setVisibility(View.VISIBLE);
+        colorEnd.setVisibility(View.GONE);
+        settings.setVisibility(View.GONE);
 
-        etRed1 = color1.findViewById(R.id.editTextRed);
-        etGreen1 = color1.findViewById(R.id.editTextGreen);
-        etBlue1 = color1.findViewById(R.id.editTextBlue);
-        etRed2 = color2.findViewById(R.id.editTextRed);
-        etGreen2 = color2.findViewById(R.id.editTextGreen);
-        etBlue2 = color2.findViewById(R.id.editTextBlue);
+        sbRed1 = colorStart.findViewById(R.id.seekBarRed);
+        sbGreen1 = colorStart.findViewById(R.id.seekBarGreen);
+        sbBlue1 = colorStart.findViewById(R.id.seekBarBlue);
+        sbRed2 = colorEnd.findViewById(R.id.seekBarRed);
+        sbGreen2 = colorEnd.findViewById(R.id.seekBarGreen);
+        sbBlue2 = colorEnd.findViewById(R.id.seekBarBlue);
 
-        ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(color1);
-        ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(color2);
+        etRed1 = colorStart.findViewById(R.id.editTextRed);
+        etGreen1 = colorStart.findViewById(R.id.editTextGreen);
+        etBlue1 = colorStart.findViewById(R.id.editTextBlue);
+        etRed2 = colorEnd.findViewById(R.id.editTextRed);
+        etGreen2 = colorEnd.findViewById(R.id.editTextGreen);
+        etBlue2 = colorEnd.findViewById(R.id.editTextBlue);
 
-        etRed1.setText("100");
-        etGreen1.setText("0");
-        etBlue1.setText("0");
-        etRed2.setText("0");
-        etGreen2.setText("0");
-        etBlue2.setText("0");
+        angle = settings.findViewById(R.id.seekBarAngle);
+        linear = settings.findViewById(R.id.linear);
+        radial = settings.findViewById(R.id.radial);
+        sweep = settings.findViewById(R.id.sweep);
+
+        ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(colorStart);
+        ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(colorEnd);
+        ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(settings);
 
         changeColorButton = findViewById(R.id.changeColor);
         changeColorTypeButton = findViewById(R.id.changeColorType);
-        isChangingColor1 = true;
+
+        sbRed1.setProgress(100);
+        ((SeekBar) settings.findViewById(R.id.seekBarRadialRadius)).setProgress(25);
+        ((SeekBar) settings.findViewById(R.id.seekBarRadialX)).setProgress(50);
+        ((SeekBar) settings.findViewById(R.id.seekBarRadialY)).setProgress(50);
+        ((SeekBar) settings.findViewById(R.id.seekBarSweepX)).setProgress(50);
+        ((SeekBar) settings.findViewById(R.id.seekBarSweepY)).setProgress(50);
+        typeChanging = 0;
     }
 
     private void updateValuesFromEditText() {
@@ -241,41 +293,79 @@ public class GradientActivity extends AppCompatActivity {
         etRed2.setText(String.valueOf(sbRed2.getProgress()));
         etGreen2.setText(String.valueOf(sbGreen2.getProgress()));
         etBlue2.setText(String.valueOf(sbBlue2.getProgress()));
+
+        ((EditText) settings.findViewById(R.id.editTextRadialRadius)).setText(String.valueOf(((SeekBar) settings.findViewById(R.id.seekBarRadialRadius)).getProgress() * 10));
+        ((EditText) settings.findViewById(R.id.editTextRadialX)).setText(String.valueOf(((SeekBar) settings.findViewById(R.id.seekBarRadialX)).getProgress()));
+        ((EditText) settings.findViewById(R.id.editTextRadialY)).setText(String.valueOf(((SeekBar) settings.findViewById(R.id.seekBarRadialY)).getProgress()));
+        ((EditText) settings.findViewById(R.id.editTextSweepX)).setText(String.valueOf(((SeekBar) settings.findViewById(R.id.seekBarSweepX)).getProgress()));
+        ((EditText) settings.findViewById(R.id.editTextSweepY)).setText(String.valueOf(((SeekBar) settings.findViewById(R.id.seekBarSweepY)).getProgress()));
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void setDrawable() {
         GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[] { Color.argb(255, sbRed1.getProgress(), sbGreen1.getProgress(), sbBlue1.getProgress()),
                         Color.argb(255, sbRed2.getProgress(), sbGreen2.getProgress(), sbBlue2.getProgress()) });
-        switch (angle.getProgress()) {
-            case 0:
-            case 8:
-                drawable.setOrientation(GradientDrawable.Orientation.TOP_BOTTOM);
+
+        drawable.setShape(GradientDrawable.RECTANGLE);
+        switch (((RadioGroup) settings.findViewById(R.id.radioGroup)).getCheckedRadioButtonId()) {
+            case R.id.linear:
+                switch (angle.getProgress()) {
+                    case 0:
+                    case 8:
+                        drawable.setOrientation(GradientDrawable.Orientation.TOP_BOTTOM);
+                        break;
+                    case 1:
+                        drawable.setOrientation(GradientDrawable.Orientation.TL_BR);
+                        break;
+                    case 2:
+                        drawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+                        break;
+                    case 3:
+                        drawable.setOrientation(GradientDrawable.Orientation.BL_TR);
+                        break;
+                    case 4:
+                        drawable.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
+                        break;
+                    case 5:
+                        drawable.setOrientation(GradientDrawable.Orientation.BR_TL);
+                        break;
+                    case 6:
+                        drawable.setOrientation(GradientDrawable.Orientation.RIGHT_LEFT);
+                        break;
+                    case 7:
+                        drawable.setOrientation(GradientDrawable.Orientation.TR_BL);
+                        break;
+                }
+                drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
                 break;
-            case 1:
-                drawable.setOrientation(GradientDrawable.Orientation.TL_BR);
+            case R.id.radial:
+                drawable.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                drawable.setGradientRadius(((SeekBar) settings.findViewById(R.id.seekBarRadialRadius)).getProgress() * 10);
+                drawable.setGradientCenter((float)((SeekBar) settings.findViewById(R.id.seekBarRadialX)).getProgress() / 100,
+                        (float)((SeekBar) settings.findViewById(R.id.seekBarRadialY)).getProgress() / 100);
                 break;
-            case 2:
-                drawable.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
-                break;
-            case 3:
-                drawable.setOrientation(GradientDrawable.Orientation.BL_TR);
-                break;
-            case 4:
-                drawable.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
-                break;
-            case 5:
-                drawable.setOrientation(GradientDrawable.Orientation.BR_TL);
-                break;
-            case 6:
-                drawable.setOrientation(GradientDrawable.Orientation.RIGHT_LEFT);
-                break;
-            case 7:
-                drawable.setOrientation(GradientDrawable.Orientation.TR_BL);
+            case R.id.sweep:
+                drawable.setGradientType(GradientDrawable.SWEEP_GRADIENT);
+                drawable.setGradientCenter((float)((SeekBar) settings.findViewById(R.id.seekBarSweepX)).getProgress() / 100,
+                        (float)((SeekBar) settings.findViewById(R.id.seekBarSweepY)).getProgress() / 100);
                 break;
         }
-        drawable.setShape(GradientDrawable.RECTANGLE);
-        drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+
         gradient.setForeground(drawable);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                v.clearFocus();
+                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+            updateValuesFromEditText();
+        }
+        return super.dispatchTouchEvent(event);
     }
 }

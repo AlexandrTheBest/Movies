@@ -24,7 +24,6 @@ import java.io.OutputStreamWriter;
 
 public class AddMovieActivity extends AppCompatActivity {
 
-    RelativeLayout mainLayout;
     EditText name, description;
     ImageView poster;
     String posterPath;
@@ -55,8 +54,6 @@ public class AddMovieActivity extends AppCompatActivity {
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, 1);
         });
-
-        mainLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_appearance));
     }
 
     @Override
@@ -66,7 +63,6 @@ public class AddMovieActivity extends AppCompatActivity {
     }
 
     private void initialComponent() {
-        mainLayout = findViewById(R.id.mainLayout);
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
         poster = findViewById(R.id.poster);

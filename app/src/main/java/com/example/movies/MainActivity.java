@@ -35,7 +35,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    RelativeLayout mainLayout;
     LinearLayout moviesLayout;
     Button add, delete, gradient;
     List<View> allViews;
@@ -67,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, GradientActivity.class));
             finish();
         });
-
-        mainLayout.startAnimation(AnimationUtils.loadAnimation(this, R.anim.alpha_appearance));
     }
 
     @Override
@@ -76,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialComponents() {
-        mainLayout = findViewById(R.id.mainLayout);
         moviesLayout = findViewById(R.id.moviesLayout);
         add = findViewById(R.id.add);
         delete = findViewById(R.id.delete);

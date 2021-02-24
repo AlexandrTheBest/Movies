@@ -36,19 +36,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    style="@style/Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Angle"/>
-
-                <SeekBar
-                    style="@style/Widget.AppCompat.SeekBar.Discrete"
-                    android:id="@+id/seekBarAngle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="8" />
-
                 <LinearLayout
                     android:id="@+id/colorEditLayout"
                     android:layout_width="match_parent"
