@@ -448,7 +448,7 @@ public class GradientActivity extends AppCompatActivity {
         if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
             Bitmap bitmap = drawableToBitmap(createDrawable());
 
-            String extStorageDirectory =  Environment.getExternalStorageDirectory().toString();
+            String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
             try {
                 FileOutputStream outStream = new FileOutputStream(extStorageDirectory + "/gradient.png");
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
@@ -459,7 +459,6 @@ public class GradientActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            bitmap.recycle();
             return true;
         } else {
             ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -471,7 +470,7 @@ public class GradientActivity extends AppCompatActivity {
         Bitmap bitmap;
 
         if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+            bitmap = Bitmap.createBitmap(720, 720, Bitmap.Config.ARGB_8888);
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         }
