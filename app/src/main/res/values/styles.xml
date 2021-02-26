@@ -27,6 +27,8 @@
         <item name="android:textColor">@color/button_text_dark</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textAllCaps">false</item>
+        <item name="paddingStart">10dp</item>
+        <item name="paddingEnd">10dp</item>
     </style>
 
     <style name="ButtonRed" parent="ButtonWhite">

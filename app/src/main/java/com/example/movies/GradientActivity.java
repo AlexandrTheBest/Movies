@@ -1,15 +1,22 @@
 package com.example.movies;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,12 +31,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.transform.Result;
 
 public class GradientActivity extends AppCompatActivity {
 
@@ -242,6 +253,8 @@ public class GradientActivity extends AppCompatActivity {
             }
         });
 
+        ((Button) settings.findViewById(R.id.saveGradient)).setOnClickListener(v -> saveDrawable(this));
+
         updateValuesFromSeekBar();
         setDrawable();
 
@@ -252,14 +265,17 @@ public class GradientActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBackPressed() {
+
         @SuppressLint("InflateParams")
         View view = getLayoutInflater().inflate(R.layout.dialog_save_gradient, null);
         ((TextView) view.findViewById(R.id.title)).setText("Would you like to save the gradient?");
         ((TextView) view.findViewById(R.id.positive)).setOnClickListener(v -> {
-            saveDrawable();
-            startActivity(new Intent(GradientActivity.this, MainActivity.class));
-            finish();
+            if (saveDrawable(this)) {
+                startActivity(new Intent(GradientActivity.this, MainActivity.class));
+                finish();
+            }
         });
+
         ((TextView) view.findViewById(R.id.negative)).setOnClickListener(v -> {
             startActivity(new Intent(GradientActivity.this, MainActivity.class));
             finish();
@@ -427,21 +443,28 @@ public class GradientActivity extends AppCompatActivity {
         gradient.setForeground(createDrawable());
     }
 
-    private void saveDrawable() {
-        Bitmap bitmap = drawableToBitmap(createDrawable());
+    private boolean saveDrawable(Activity activity) {
+        int permissionStatus = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+            Bitmap bitmap = drawableToBitmap(createDrawable());
 
-        String extStorageDirectory =  Environment.getExternalStorageDirectory().toString();
-        try {
-            FileOutputStream outStream = new FileOutputStream(extStorageDirectory + "/gradient.png");
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            outStream.flush();
-            outStream.close();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            String extStorageDirectory =  Environment.getExternalStorageDirectory().toString();
+            try {
+                FileOutputStream outStream = new FileOutputStream(extStorageDirectory + "/gradient.png");
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                outStream.flush();
+                outStream.close();
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            bitmap.recycle();
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            return false;
         }
-
-        bitmap.recycle();
     }
 
     public Bitmap drawableToBitmap(GradientDrawable drawable) {

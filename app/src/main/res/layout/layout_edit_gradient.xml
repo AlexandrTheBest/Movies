@@ -4,9 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        style="@style/ButtonGray"
+        android:id="@+id/saveGradient"
+        android:layout_width="match_parent"
+        android:text="Save gradient"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"/>
+
     <LinearLayout
+        android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/saveGradient"
         android:orientation="vertical">
 
         <TextView
@@ -45,7 +55,8 @@
         <RelativeLayout
             android:id="@+id/someSettings"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -253,9 +264,6 @@
                     android:max="100"/>
 
             </LinearLayout>
-
         </RelativeLayout>
-
     </LinearLayout>
-
 </RelativeLayout>
