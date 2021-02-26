@@ -9,10 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_margin="10dp">
 
         <LinearLayout
             android:id="@+id/sign_in_layout"
@@ -50,7 +47,7 @@
                 android:hint="@string/description"/>
 
                 <Button
-                    style="@style/Button"
+                    style="@style/ButtonWhite"
                     android:background="@drawable/input"
                     android:textColor="@color/text"
                     android:layout_width="match_parent"
@@ -58,7 +55,7 @@
                     android:text="@string/load_image" />
 
             <Button
-                style="@style/Button"
+                style="@style/ButtonGray"
                 android:id="@+id/add"
                 android:text="@string/add_movie"
                 android:layout_marginTop="10dp"/>

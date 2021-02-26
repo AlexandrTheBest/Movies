@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttons_layout.setVisibility(View.VISIBLE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void initialComponents() {
         title = findViewById(R.id.title);
 
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         sign_up_password = findViewById(R.id.sign_up_password);
         sign_up_repeat_password = findViewById(R.id.sign_up_repeat_password);
 
+        ((TextView) findViewById(R.id.version)).setText("App version: " + BuildConfig.VERSION_NAME);
         mSettings = getSharedPreferences("settings", Context.MODE_PRIVATE);
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,9 +11,10 @@
         android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/buttons"
         android:orientation="vertical"
-        android:layout_above="@id/showEditor"
-        android:gravity="center">
+        android:gravity="center"
+        tools:ignore="UselessParent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/gradient"
@@ -32,58 +34,60 @@
             android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/colorEditLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/colorEditLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp">
-
-                    <Button
-                        style="@style/Button"
-                        android:id="@+id/changeColorType"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Change Color 2"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"/>
-
-                    <Button
-                        style="@style/Button"
-                        android:id="@+id/changeSettings"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Change Settings"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:orientation="vertical"/>
 
         </ScrollView>
-
     </LinearLayout>
 
-    <Button
-        android:id="@+id/showEditor"
-        style="@style/Button"
+    <LinearLayout
+        android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Open changing colors" />
+        android:layout_margin="10dp"
+        android:visibility="gone">
 
+        <Button
+            style="@style/ButtonWhite"
+            android:id="@+id/addColor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5"/>
+
+        <Button
+            style="@style/ButtonRed"
+            android:id="@+id/deleteColor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5"/>
+
+        <Button
+            style="@style/ButtonGray"
+            android:id="@+id/changeColorType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Color 2"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"/>
+
+        <Button
+            style="@style/ButtonGray"
+            android:id="@+id/changeSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 </RelativeLayout>

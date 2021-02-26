@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_above="@id/back"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
@@ -43,10 +42,11 @@
     </ScrollView>
 
     <Button
-        style="@style/Button"
+        style="@style/ButtonGray"
         android:id="@+id/back"
         android:text="@string/back"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:onClick="onClick"/>
 

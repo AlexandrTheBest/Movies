@@ -1,32 +1,33 @@
 package com.example.movies;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +37,11 @@ public class GradientActivity extends AppCompatActivity {
     LinearLayout colorEditLayout;
     List<View> colors;
     View settings;
-    ScrollView allSettings;
     RadioButton linear, radial, sweep;
-    Button showEditor, changeColorTypeButton, changeSettingsButton;
+    Button changeColorTypeButton, changeSettingsButton;
     boolean isEditorActive, isChangingSettings;
-    int activeNow; // 0 - color1, 1 - color2, ..., colors.size() - settings
+    int activeNow; // 0 - color1, 1 - color2, ...
+    SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
 
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
@@ -50,65 +51,52 @@ public class GradientActivity extends AppCompatActivity {
 
         initialComponent();
 
+        colors.get(0).setVisibility(View.VISIBLE);
+        ((SeekBar) colors.get(0).findViewById(R.id.seekBarRed)).setProgress(100);
+
         Animation appearance = AnimationUtils.loadAnimation(this, R.anim.alpha_appearance);
         Animation disappearance = AnimationUtils.loadAnimation(this, R.anim.alpha_disappearance);
 
-        SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateValuesFromSeekBar();
-                setDrawable();
-            }
+//        TextWatcher textWatcher = new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                String number = s.toString();
+//
+//                if (number.isEmpty()) {
+//                    s.clear();
+//                    return;
+//                }
+//
+//                if (number.length() > 1 && number.charAt(0) == '0') {
+//                    s.clear();
+//                    s.append(number.charAt(1));
+//                    return;
+//                }
+//
+//                if (Integer.parseInt(number) > 255) {
+//                    s.clear();
+//                    s.append("255");
+//                }
+//            }
+//        };
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        };
-
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String number = s.toString();
-
-                if (number.isEmpty()) {
-                    s.clear();
-                    return;
-                }
-
-                if (number.length() > 1 && number.charAt(0) == '0') {
-                    s.clear();
-                    s.append(number.charAt(1));
-                    return;
-                }
-
-                if (Integer.parseInt(number) > 255) {
-                    s.clear();
-                    s.append("255");
-                }
-            }
-        };
-
-        for (View x : colors) {
-            ((SeekBar) x.findViewById(R.id.seekBarRed)).setOnSeekBarChangeListener(onSeekBarChangeListener);
-            ((SeekBar) x.findViewById(R.id.seekBarGreen)).setOnSeekBarChangeListener(onSeekBarChangeListener);
-            ((SeekBar) x.findViewById(R.id.seekBarBlue)).setOnSeekBarChangeListener(onSeekBarChangeListener);
-
-            ((EditText) x.findViewById(R.id.editTextRed)).addTextChangedListener(textWatcher);
-            ((EditText) x.findViewById(R.id.editTextGreen)).addTextChangedListener(textWatcher);
-            ((EditText) x.findViewById(R.id.editTextBlue)).addTextChangedListener(textWatcher);
-        }
+//        for (View x : colors) {
+//            ((SeekBar) x.findViewById(R.id.seekBarRed)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+//            ((SeekBar) x.findViewById(R.id.seekBarGreen)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+//            ((SeekBar) x.findViewById(R.id.seekBarBlue)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+//
+////            ((EditText) x.findViewById(R.id.editTextRed)).addTextChangedListener(textWatcher);
+////            ((EditText) x.findViewById(R.id.editTextGreen)).addTextChangedListener(textWatcher);
+////            ((EditText) x.findViewById(R.id.editTextBlue)).addTextChangedListener(textWatcher);
+//        }
 
         ((SeekBar) settings.findViewById(R.id.seekBarAngle)).setOnSeekBarChangeListener(onSeekBarChangeListener);
         ((SeekBar) settings.findViewById(R.id.seekBarRadialRadius)).setOnSeekBarChangeListener(onSeekBarChangeListener);
@@ -119,57 +107,101 @@ public class GradientActivity extends AppCompatActivity {
 
         ((RadioGroup) settings.findViewById(R.id.radioGroup)).setOnCheckedChangeListener((group, checkedId) -> {
             Handler handler = new Handler();
-
             settings.findViewById(R.id.someSettings).startAnimation(disappearance);
+            gradient.startAnimation(disappearance);
+
             switch (checkedId) {
                 case R.id.linear:
-                    gradient.startAnimation(disappearance);
                     handler.postDelayed(() -> {
-                        gradient.startAnimation(appearance);
                         settings.findViewById(R.id.linearLayout).setVisibility(View.VISIBLE);
                         settings.findViewById(R.id.radialLayout).setVisibility(View.GONE);
                         settings.findViewById(R.id.sweepLayout).setVisibility(View.GONE);
                     }, 500);
                     break;
                 case R.id.radial:
-                    gradient.startAnimation(disappearance);
                     handler.postDelayed(() -> {
-                        gradient.startAnimation(appearance);
                         settings.findViewById(R.id.linearLayout).setVisibility(View.GONE);
                         settings.findViewById(R.id.radialLayout).setVisibility(View.VISIBLE);
                         settings.findViewById(R.id.sweepLayout).setVisibility(View.GONE);
                     }, 500);
                     break;
                 case R.id.sweep:
-                    gradient.startAnimation(disappearance);
                     handler.postDelayed(() -> {
-                        gradient.startAnimation(appearance);
                         settings.findViewById(R.id.linearLayout).setVisibility(View.GONE);
                         settings.findViewById(R.id.radialLayout).setVisibility(View.GONE);
                         settings.findViewById(R.id.sweepLayout).setVisibility(View.VISIBLE);
                     }, 500);
                     break;
             }
+
             handler.postDelayed(() -> {
                 settings.findViewById(R.id.someSettings).startAnimation(appearance);
+                gradient.startAnimation(appearance);
                 setDrawable();
             }, 500);
         });
 
-        showEditor.setOnClickListener(v -> {
+        gradient.setOnClickListener(v -> {
             if (!isEditorActive) {
-                allSettings.setVisibility(View.VISIBLE);
-                showEditor.setText("Close changing colors");
+                findViewById(R.id.buttons).startAnimation(appearance);
+                findViewById(R.id.scroll).setVisibility(View.VISIBLE);
+                findViewById(R.id.buttons).setVisibility(View.VISIBLE);
                 isEditorActive = true;
             } else {
-                allSettings.setVisibility(View.GONE);
-                showEditor.setText("Open changing colors");
+                findViewById(R.id.buttons).startAnimation(disappearance);
+                findViewById(R.id.scroll).setVisibility(View.GONE);
+                findViewById(R.id.buttons).setVisibility(View.GONE);
                 isEditorActive = false;
+            }
+        });
+
+        ((Button) findViewById(R.id.addColor)).setOnClickListener(v -> {
+            blockButtons();
+            addColor();
+            gradient.startAnimation(disappearance);
+            new Handler().postDelayed(() -> {
+                setDrawable();
+                gradient.startAnimation(appearance);
+            }, 500);
+            changeColorTypeButton.setText("Color " + (activeNow + 2));
+        });
+
+        // TODO протестировать / улучшить
+        ((Button) findViewById(R.id.deleteColor)).setOnClickListener(v -> {
+            if (colors.size() > 2) {
+                Handler handler = new Handler();
+                gradient.startAnimation(disappearance);
+                blockButtons();
+
+                if (activeNow == colors.size() - 1 && !isChangingSettings) {
+                    colors.get(activeNow).startAnimation(disappearance);
+                    handler.postDelayed(() -> {
+                        colors.get(activeNow - 1).startAnimation(appearance);
+                        colors.get(activeNow - 1).setVisibility(View.VISIBLE);
+                        colors.get(activeNow).setVisibility(View.GONE);
+                        activeNow--;
+                    }, 500);
+                } else {
+                    if (activeNow == colors.size() - 1) {
+                        activeNow--;
+                    }
+                }
+                if (activeNow == colors.size() - 2) {
+                    changeColorTypeButton.setText("Color " + 1);
+                }
+
+                handler.postDelayed(() -> {
+                    colors.remove(colors.size() - 1);
+                    setDrawable();
+                    gradient.startAnimation(appearance);
+                }, 500);
             }
         });
 
         changeColorTypeButton.setOnClickListener(v -> {
             Handler handler = new Handler();
+            blockButtons();
+
             if (isChangingSettings) {
                 settings.startAnimation(disappearance);
                 handler.postDelayed(() -> settings.setVisibility(View.GONE), 500);
@@ -178,16 +210,19 @@ public class GradientActivity extends AppCompatActivity {
                 colors.get(activeNow).startAnimation(disappearance);
                 handler.postDelayed(() -> colors.get(activeNow).setVisibility(View.GONE), 500);
             }
+
             handler.postDelayed(() -> {
                 colors.get((activeNow + 1) % colors.size()).startAnimation(appearance);
                 colors.get((activeNow + 1) % colors.size()).setVisibility(View.VISIBLE);
-                changeColorTypeButton.setText("Change color " + ((activeNow + 2) % colors.size() + 1));
+                changeColorTypeButton.setText("Color " + ((activeNow + 2) % colors.size() + 1));
                 activeNow = (activeNow + 1) % colors.size();
             }, 500);
         });
 
         changeSettingsButton.setOnClickListener(v -> {
             Handler handler = new Handler();
+            blockButtons();
+
             if (isChangingSettings) {
                 settings.startAnimation(disappearance);
                 handler.postDelayed(() -> {
@@ -209,35 +244,58 @@ public class GradientActivity extends AppCompatActivity {
 
         updateValuesFromSeekBar();
         setDrawable();
+
+        Toast.makeText(getApplicationContext(),
+                "Click on the gradient to change it", Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(GradientActivity.this, MainActivity.class));
-        finish();
+        @SuppressLint("InflateParams")
+        View view = getLayoutInflater().inflate(R.layout.dialog_save_gradient, null);
+        ((TextView) view.findViewById(R.id.title)).setText("Would you like to save the gradient?");
+        ((TextView) view.findViewById(R.id.positive)).setOnClickListener(v -> {
+            saveDrawable();
+            startActivity(new Intent(GradientActivity.this, MainActivity.class));
+            finish();
+        });
+        ((TextView) view.findViewById(R.id.negative)).setOnClickListener(v -> {
+            startActivity(new Intent(GradientActivity.this, MainActivity.class));
+            finish();
+        });
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(view);
+        dialog.show();
     }
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     private void initialComponent() {
         gradient = findViewById(R.id.gradient);
         colorEditLayout = findViewById(R.id.colorEditLayout);
-        allSettings = findViewById(R.id.scroll);
         colors = new ArrayList<>();
 
-        colors.add(getLayoutInflater().inflate(R.layout.layout_edit_color, null));
-        colors.add(getLayoutInflater().inflate(R.layout.layout_edit_color, null));
-        settings = getLayoutInflater().inflate(R.layout.layout_edit_gradient, null);
-
-        for (int i = 0; i < colors.size(); i++) {
-            ((TextView) colors.get(i).findViewById(R.id.title)).setText("Color " + (i + 1));
-            if (i == 0) {
-                colors.get(i).setVisibility(View.VISIBLE);
-                ((SeekBar) colors.get(i).findViewById(R.id.seekBarRed)).setProgress(100);
-            } else {
-                colors.get(i).setVisibility(View.GONE);
+        onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                updateValuesFromSeekBar();
+                setDrawable();
             }
-            ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(colors.get(i));
-        }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        };
+
+        addColor();
+        addColor();
+
+        settings = getLayoutInflater().inflate(R.layout.layout_edit_gradient, null);
 
         settings.setVisibility(View.GONE);
 
@@ -245,9 +303,8 @@ public class GradientActivity extends AppCompatActivity {
         radial = settings.findViewById(R.id.radial);
         sweep = settings.findViewById(R.id.sweep);
 
-        ((LinearLayout) findViewById(R.id.colorEditLayout)).addView(settings);
+        colorEditLayout.addView(settings);
 
-        showEditor = findViewById(R.id.showEditor);
         changeColorTypeButton = findViewById(R.id.changeColorType);
         changeSettingsButton = findViewById(R.id.changeSettings);
 
@@ -261,22 +318,22 @@ public class GradientActivity extends AppCompatActivity {
         activeNow = 0;
     }
 
-    private void updateValuesFromEditText() {
-        for (View x : colors) {
-            if (((EditText) x.findViewById(R.id.editTextRed)).getText().toString().isEmpty()) {
-                ((EditText) x.findViewById(R.id.editTextRed)).setText("0");
-            }
-            if (((EditText) x.findViewById(R.id.editTextGreen)).getText().toString().isEmpty()) {
-                ((EditText) x.findViewById(R.id.editTextGreen)).setText("0");
-            }
-            if (((EditText) x.findViewById(R.id.editTextBlue)).getText().toString().isEmpty()) {
-                ((EditText) x.findViewById(R.id.editTextBlue)).setText("0");
-            }
-            ((SeekBar) x.findViewById(R.id.seekBarRed)).setProgress(Integer.parseInt(((EditText) x.findViewById(R.id.editTextRed)).getText().toString()));
-            ((SeekBar) x.findViewById(R.id.seekBarGreen)).setProgress(Integer.parseInt(((EditText) x.findViewById(R.id.editTextGreen)).getText().toString()));
-            ((SeekBar) x.findViewById(R.id.seekBarBlue)).setProgress(Integer.parseInt(((EditText) x.findViewById(R.id.editTextBlue)).getText().toString()));
-        }
-    }
+//    private void updateValuesFromEditText() {
+//        for (View x : colors) {
+//            if (((EditText) x.findViewById(R.id.editTextRed)).getText().toString().isEmpty()) {
+//                ((EditText) x.findViewById(R.id.editTextRed)).setText("0");
+//            }
+//            if (((EditText) x.findViewById(R.id.editTextGreen)).getText().toString().isEmpty()) {
+//                ((EditText) x.findViewById(R.id.editTextGreen)).setText("0");
+//            }
+//            if (((EditText) x.findViewById(R.id.editTextBlue)).getText().toString().isEmpty()) {
+//                ((EditText) x.findViewById(R.id.editTextBlue)).setText("0");
+//            }
+//            ((SeekBar) x.findViewById(R.id.seekBarRed)).setProgress(Integer.parseInt(((EditText) x.findViewById(R.id.editTextRed)).getText().toString()));
+//            ((SeekBar) x.findViewById(R.id.seekBarGreen)).setProgress(Integer.parseInt(((EditText) x.findViewById(R.id.editTextGreen)).getText().toString()));
+//            ((SeekBar) x.findViewById(R.id.seekBarBlue)).setProgress(Integer.parseInt(((EditText) x.findViewById(R.id.editTextBlue)).getText().toString()));
+//        }
+//    }
 
     private void updateValuesFromSeekBar() {
         for (View x : colors) {
@@ -291,8 +348,23 @@ public class GradientActivity extends AppCompatActivity {
         ((EditText) settings.findViewById(R.id.editTextSweepY)).setText(String.valueOf(((SeekBar) settings.findViewById(R.id.seekBarSweepY)).getProgress()));
     }
 
+    @SuppressLint("SetTextI18n")
+    private void addColor() {
+        @SuppressLint("InflateParams")
+        View view = getLayoutInflater().inflate(R.layout.layout_edit_color, null);
+        ((TextView) view.findViewById(R.id.title)).setText("Color " + (colors.size() + 1));
+        view.setVisibility(View.GONE);
+
+        ((SeekBar) view.findViewById(R.id.seekBarRed)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) view.findViewById(R.id.seekBarGreen)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+        ((SeekBar) view.findViewById(R.id.seekBarBlue)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+
+        colors.add(view);
+        colorEditLayout.addView(view);
+    }
+
     @SuppressLint("NonConstantResourceId")
-    private void setDrawable() {
+    private GradientDrawable createDrawable() {
         int[] rgbColors = new int[colors.size()];
         for (int i = 0; i < colors.size(); i++) {
             rgbColors[i] = Color.argb(255,
@@ -348,20 +420,70 @@ public class GradientActivity extends AppCompatActivity {
                 break;
         }
 
-        gradient.setForeground(drawable);
+        return drawable;
     }
 
-    @Override
-    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof EditText) {
-                v.clearFocus();
-                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            }
-            updateValuesFromEditText();
+    private void setDrawable() {
+        gradient.setForeground(createDrawable());
+    }
+
+    private void saveDrawable() {
+        Bitmap bitmap = drawableToBitmap(createDrawable());
+
+        String extStorageDirectory =  Environment.getExternalStorageDirectory().toString();
+        try {
+            FileOutputStream outStream = new FileOutputStream(extStorageDirectory + "/gradient.png");
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
-        return super.dispatchTouchEvent(event);
+
+        bitmap.recycle();
+    }
+
+    public Bitmap drawableToBitmap(GradientDrawable drawable) {
+        Bitmap bitmap;
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+//    @Override
+//    public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            View v = getCurrentFocus();
+//            if (v instanceof EditText) {
+//                v.clearFocus();
+//                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//            }
+//            updateValuesFromEditText();
+//        }
+//        return super.dispatchTouchEvent(event);
+//    }
+
+    private void blockButtons() {
+        ((Button) findViewById(R.id.addColor)).setEnabled(false);
+        ((Button) findViewById(R.id.deleteColor)).setEnabled(false);
+        changeColorTypeButton.setEnabled(false);
+        changeSettingsButton.setEnabled(false);
+        new Handler().postDelayed(() -> {
+            ((Button) findViewById(R.id.addColor)).setEnabled(true);
+            ((Button) findViewById(R.id.deleteColor)).setEnabled(true);
+            changeColorTypeButton.setEnabled(true);
+            changeSettingsButton.setEnabled(true);
+        }, 500);
     }
 }

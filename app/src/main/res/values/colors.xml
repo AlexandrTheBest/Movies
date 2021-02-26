@@ -6,8 +6,15 @@
     <color name="secondary">#FF000000</color>
     <color name="background">#FF000000</color>
     <color name="title">#FFFFFFFF</color>
-    <color name="text">#60FFFFFF</color>
-    <color name="button_passive">#FFFFFFFF</color>
-    <color name="button_active">#60FFFFFF</color>
-    <color name="button_text">#FF000000</color>
+    <color name="text">#70FFFFFF</color>
+    <color name="button_white_unpressed">#FFFFFFFF</color>
+    <color name="button_white_pressed">#70FFFFFF</color>
+    <color name="button_gray_unpressed">#30FFFFFF</color>
+    <color name="button_gray_pressed">#00FFFFFF</color>
+    <color name="button_red_unpressed">#FFD83A3A</color>
+    <color name="button_red_pressed">#70D83A3A</color>
+    <color name="button_text_dark_unpressed">#FF000000</color>
+    <color name="button_text_dark_pressed">#70000000</color>
+    <color name="button_text_light_unpressed">#FFFFFFFF</color>
+    <color name="button_text_light_pressed">#70FFFFFF</color>
 </resources>
