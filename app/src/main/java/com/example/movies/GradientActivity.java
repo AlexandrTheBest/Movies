@@ -448,9 +448,9 @@ public class GradientActivity extends AppCompatActivity {
         if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
             Bitmap bitmap = drawableToBitmap(createDrawable());
 
-            String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+            String extStorageDirectory = Environment.getExternalStorageDirectory().toString() + "/Download/";
             try {
-                FileOutputStream outStream = new FileOutputStream(extStorageDirectory + "/gradient.png");
+                FileOutputStream outStream = new FileOutputStream(extStorageDirectory + "gradient.png");
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
                 outStream.flush();
                 outStream.close();
